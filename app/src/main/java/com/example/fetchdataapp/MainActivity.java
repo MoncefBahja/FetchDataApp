@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private Button btn;
 
     private static final String API_URL = "https://jsonplaceholder.typicode.com/todos/1";
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,17 +35,15 @@ public class MainActivity extends AppCompatActivity {
     }
     public void fetchData(View view) {
         // Using AsyncTask
-        new FetchDataTask().execute();
-
+      //  new FetchDataTask().execute();
         // Using Thread and Handler
         // new Thread(new FetchDataRunnable()).start();
-
         // Using ExecutorService
-        // ExecutorService executor = Executors.newFixedThreadPool(1);
-        // executor.execute(new FetchDataRunnable());
-        // executor.shutdown();
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+         executor.execute(new FetchDataRunnable());
+         executor.shutdown();
     }
-    private class FetchDataTask extends AsyncTask<Void, Void, String> {
+   /* private class FetchDataTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... voids) {
@@ -56,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             text.setText(result);
         }
-    }
+    }*/
     private class FetchDataRunnable implements Runnable {
         private final Handler handler = new Handler(Looper.getMainLooper());
 
